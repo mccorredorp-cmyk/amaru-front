@@ -1144,3 +1144,48 @@
         font-size: 0.78rem;
     }
 }
+
+/* ---------- Menú móvil: corrección del fondo transparente ----------
+   Un elemento con backdrop-filter se vuelve el "contenedor" de sus hijos
+   position: fixed. Como el header tenía el desenfoque, el menú quedaba atado
+   al header (72 px de alto) y no a la pantalla: sin fondo y con el contenido
+   de la página viéndose a través. El desenfoque pasa a un pseudo-elemento. */
+.header {
+    background: transparent;
+    backdrop-filter: none;
+    -webkit-backdrop-filter: none;
+}
+
+.header::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    z-index: -1;
+    background: rgba(247, 250, 249, 0.85);
+    backdrop-filter: blur(14px);
+    -webkit-backdrop-filter: blur(14px);
+}
+
+@media (max-width: 900px) {
+    .nav {
+        top: 72px;
+        left: 0;
+        right: 0;
+        bottom: auto;
+        height: calc(100dvh - 72px);
+        overflow-y: auto;
+        background: var(--fondo);
+        border-top: 1px solid var(--borde);
+        box-shadow: 0 24px 40px rgba(31, 45, 58, 0.12);
+        z-index: 99;
+    }
+
+    .nav.abierto {
+        opacity: 1;
+    }
+
+    .header.con-sombra::before,
+    body.sin-scroll .header::before {
+        background: var(--fondo);
+    }
+}
