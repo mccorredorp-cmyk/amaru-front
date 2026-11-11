@@ -4,6 +4,7 @@ import { obtenerInmueble, subirImagenes } from '../api/amaru.js';
 import { useApp } from '../context/AppContext.jsx';
 import { capitalizar, fechaCorta, formatoArea, formatoCOP, textoAlerta } from '../utils/formato.js';
 import { fotoReferencia } from '../utils/fotos.js';
+import Modal360, { PANORAMA_DEMO } from './tour360/Modal360.jsx';
 
 export default function DetalleInmueble({ id }) {
   const { cerrarModal, favoritos, alternarFavorito, mostrarToast } = useApp();
@@ -11,6 +12,7 @@ export default function DetalleInmueble({ id }) {
   const [error, setError] = useState(null);
   const [fotoActiva, setFotoActiva] = useState(0);
   const [subiendo, setSubiendo] = useState(false);
+  const [ver360, setVer360] = useState(false);
   const archivo = useRef(null);
 
   const cargar = useCallback(() => {
@@ -43,6 +45,9 @@ export default function DetalleInmueble({ id }) {
   };
 
   const titulo = inmueble ? capitalizar(inmueble.nombre) : 'Detalle del inmueble';
+  // Cuando el back marque fotos panorámicas (campo es_360), se usa la real;
+  // mientras tanto se muestra una panorámica de ejemplo.
+  const foto360 = inmueble?.imagenes.find((im) => im.es_360);
 
   return (
     <Modal titulo={titulo} onCerrar={cerrarModal} ancho="ancho" className="detalle">
@@ -68,6 +73,10 @@ export default function DetalleInmueble({ id }) {
                 alt={inmueble.imagenes.length ? `Foto ${fotoActiva + 1} de ${titulo}` : 'Foto de referencia'}
               />
               {!inmueble.imagenes.length && <span className="badge-status">Foto de referencia</span>}
+              <button type="button" className="boton-360" onClick={() => setVer360(true)}>
+                <span className="boton-360-icono" aria-hidden="true">360°</span>
+                {foto360 ? 'Ver en 360°' : 'Demo 360°'}
+              </button>
             </div>
             {inmueble.imagenes.length > 1 && (
               <div className="detalle-miniaturas">
@@ -184,6 +193,15 @@ export default function DetalleInmueble({ id }) {
             </button>
           </div>
         </div>
+      )}
+
+      {ver360 && inmueble && (
+        <Modal360
+          url={foto360?.url ?? PANORAMA_DEMO}
+          titulo={titulo}
+          esDemo={!foto360}
+          onCerrar={() => setVer360(false)}
+        />
       )}
     </Modal>
   );

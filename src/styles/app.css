@@ -885,3 +885,262 @@
 .contacto-wrapper::before {
     pointer-events: none;
 }
+
+/* ---------- Tour 360° (Three.js) ---------- */
+.boton-360 {
+    position: absolute;
+    left: 14px;
+    bottom: 14px;
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    padding: 8px 16px 8px 8px;
+    border: none;
+    border-radius: 999px;
+    background: rgba(31, 45, 58, 0.88);
+    color: #fff;
+    font: inherit;
+    font-weight: 700;
+    font-size: 0.9rem;
+    cursor: pointer;
+    backdrop-filter: blur(6px);
+    transition: transform 0.2s ease, background 0.2s ease;
+}
+
+.boton-360:hover {
+    background: var(--turquesa-oscuro);
+    transform: translateY(-2px);
+}
+
+.boton-360-icono {
+    display: grid;
+    place-items: center;
+    width: 38px;
+    height: 38px;
+    border-radius: 50%;
+    background: var(--naranja);
+    font-size: 0.72rem;
+    font-weight: 800;
+    animation: pulso360 2.4s ease-in-out infinite;
+}
+
+@keyframes pulso360 {
+    0%, 100% { box-shadow: 0 0 0 0 rgba(242, 140, 40, 0.6); }
+    50% { box-shadow: 0 0 0 8px rgba(242, 140, 40, 0); }
+}
+
+.modal-app-panel.modal-completo {
+    width: min(1280px, 100%);
+    height: min(820px, calc(100dvh - 32px));
+    overflow: hidden;
+    background: var(--tinta);
+}
+
+.modal-360 .modal-cerrar {
+    z-index: 5;
+}
+
+.tour360 {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    background: var(--tinta);
+    touch-action: none;
+    user-select: none;
+    cursor: grab;
+}
+
+.tour360:active {
+    cursor: grabbing;
+}
+
+.tour360:fullscreen {
+    border-radius: 0;
+}
+
+.tour360 canvas {
+    display: block;
+}
+
+.tour-etiqueta {
+    position: absolute;
+    top: 16px;
+    left: 16px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 8px 16px 8px 8px;
+    border-radius: 999px;
+    background: rgba(31, 45, 58, 0.78);
+    backdrop-filter: blur(8px);
+    color: #fff;
+    max-width: calc(100% - 100px);
+    pointer-events: none;
+}
+
+.tour-etiqueta strong {
+    display: block;
+    font-size: 0.92rem;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.tour-etiqueta small {
+    color: #c5d0da;
+    font-size: 0.78rem;
+}
+
+.tour-etiqueta > div {
+    min-width: 0;
+}
+
+.tour-badge {
+    flex-shrink: 0;
+    display: grid;
+    place-items: center;
+    width: 42px;
+    height: 42px;
+    border-radius: 50%;
+    background: var(--naranja);
+    font-weight: 800;
+    font-size: 0.78rem;
+}
+
+.tour-ayuda {
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 8px;
+    padding: 18px 26px;
+    border-radius: var(--radio-lg);
+    background: rgba(31, 45, 58, 0.6);
+    color: #fff;
+    font-weight: 700;
+    pointer-events: none;
+    animation: aparecer 0.4s ease;
+}
+
+.tour-mano {
+    font-size: 2rem;
+    animation: deslizar 1.6s ease-in-out infinite;
+}
+
+@keyframes deslizar {
+    0%, 100% { transform: translateX(-14px); }
+    50% { transform: translateX(14px); }
+}
+
+.tour-controles {
+    position: absolute;
+    left: 50%;
+    bottom: 18px;
+    transform: translateX(-50%);
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    padding: 6px;
+    border-radius: 999px;
+    background: rgba(31, 45, 58, 0.82);
+    backdrop-filter: blur(8px);
+    max-width: calc(100% - 24px);
+}
+
+.tour-controles button {
+    width: 42px;
+    height: 42px;
+    border: none;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.1);
+    color: #fff;
+    font-size: 1.25rem;
+    font-weight: 700;
+    cursor: pointer;
+    flex-shrink: 0;
+    transition: background 0.2s ease;
+}
+
+.tour-controles button:hover {
+    background: rgba(255, 255, 255, 0.22);
+}
+
+.tour-controles button.on {
+    background: var(--turquesa);
+}
+
+.tour-subir {
+    display: inline-flex;
+    align-items: center;
+    height: 42px;
+    padding: 0 16px;
+    border-radius: 999px;
+    background: var(--naranja);
+    color: #fff;
+    font-weight: 700;
+    font-size: 0.85rem;
+    white-space: nowrap;
+    cursor: pointer;
+}
+
+.tour-subir:hover {
+    background: var(--naranja-oscuro);
+}
+
+.tour-subir input {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    opacity: 0;
+}
+
+.tour-mensaje {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    color: #fff;
+    text-align: center;
+    padding: 24px;
+    pointer-events: none;
+}
+
+.tour-mensaje span {
+    color: #c5d0da;
+}
+
+.tour-spinner {
+    width: 38px;
+    height: 38px;
+    border-radius: 50%;
+    border: 4px solid rgba(255, 255, 255, 0.2);
+    border-top-color: var(--naranja);
+    animation: girar 0.9s linear infinite;
+}
+
+@keyframes girar {
+    to { transform: rotate(360deg); }
+}
+
+@media (max-width: 640px) {
+    .modal-app-panel.modal-completo {
+        height: calc(100dvh - 16px);
+    }
+
+    .tour-controles button {
+        width: 38px;
+        height: 38px;
+    }
+
+    .tour-subir {
+        height: 38px;
+        padding: 0 12px;
+        font-size: 0.78rem;
+    }
+}
