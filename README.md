@@ -115,7 +115,11 @@ envíe, el botón cambia de "Demo 360°" a "Ver en 360°" con la foto real.
 - La API no tiene un endpoint para mensajes de contacto: el formulario prepara
   el correo en la aplicación de correo de la persona. Cuando el back tenga
   `POST /mensajes`, basta con cambiar `enviar` en `Contacto.jsx`.
-- La API no trae coordenadas por inmueble, así que el mapa agrupa por ciudad.
+- La API no trae coordenadas por inmueble. En Pereira el mapa pone un pin por
+  inmueble con coordenadas calculadas una vez con Nominatim (OpenStreetMap) y
+  guardadas en `src/data/ubicacionesPereira.js` (18 de 19; el de la Av. 30 de
+  Agosto no se pudo ubicar). Los inmuebles nuevos no salen hasta que el back
+  guarde latitud y longitud. El resto del país se agrupa por ciudad.
 - Los inmuebles importados del CSV no tienen fotos: se muestra una foto de
   referencia marcada como tal hasta que el propietario suba las reales.
 - La API no tiene endpoint de favoritos: cada cuenta guarda su lista en el

@@ -1,0 +1,231 @@
+[
+ {
+  "codigos": [
+   "290-102982"
+  ],
+  "direccion": "Calle 18 # 31-82, Conj. Res. Ciudad Pereira",
+  "intentos": [
+   {
+    "esquina": [
+     "Calle 18",
+     "Carrera 31"
+    ]
+   },
+   {
+    "lugar": "Ciudad Pereira"
+   }
+  ]
+ },
+ {
+  "codigos": [
+   "290-24287"
+  ],
+  "direccion": "Calle 36 con Carrera 14, Urb. La Elvira",
+  "intentos": [
+   {
+    "esquina": [
+     "Calle 36",
+     "Carrera 14"
+    ]
+   },
+   {
+    "lugar": "La Elvira"
+   }
+  ]
+ },
+ {
+  "codigos": [
+   "290-150462"
+  ],
+  "direccion": "Calle 23 # 8-55, C.C. Lago Plaza, local 219",
+  "intentos": [
+   {
+    "lugar": "Lago Plaza"
+   },
+   {
+    "esquina": [
+     "Calle 23",
+     "Carrera 8"
+    ]
+   }
+  ]
+ },
+ {
+  "codigos": [
+   "290-120782",
+   "290-120784",
+   "290-120785",
+   "290-120786",
+   "290-120789",
+   "290-120790",
+   "290-120791",
+   "290-120792"
+  ],
+  "direccion": "Carrera 11 con Calle 20 (esquina), Edificio Coferco",
+  "intentos": [
+   {
+    "lugar": "Coferco"
+   },
+   {
+    "esquina": [
+     "Carrera 11",
+     "Calle 20"
+    ]
+   }
+  ]
+ },
+ {
+  "codigos": [
+   "290-60373"
+  ],
+  "direccion": "Calle 15 # 13-39, Edificio Andros, local 101",
+  "intentos": [
+   {
+    "esquina": [
+     "Calle 15",
+     "Carrera 13"
+    ]
+   }
+  ]
+ },
+ {
+  "codigos": [
+   "290-13639"
+  ],
+  "direccion": "Calle 1 # 12-34",
+  "intentos": [
+   {
+    "esquina": [
+     "Calle 1",
+     "Carrera 12"
+    ]
+   }
+  ]
+ },
+ {
+  "codigos": [
+   "290-78652"
+  ],
+  "direccion": "Unidad Residencial Serrana, bloque 5, apto 502",
+  "intentos": [
+   {
+    "lugar": "Serrana"
+   }
+  ]
+ },
+ {
+  "codigos": [
+   "290-14535"
+  ],
+  "direccion": "Calle 14 # 13-32",
+  "intentos": [
+   {
+    "esquina": [
+     "Calle 14",
+     "Carrera 13"
+    ]
+   }
+  ]
+ },
+ {
+  "codigos": [
+   "290-45559"
+  ],
+  "direccion": "Avenida Circunvalar # 6-11",
+  "intentos": [
+   {
+    "esquina": [
+     "Avenida Circunvalar",
+     "Calle 6"
+    ]
+   },
+   {
+    "esquina": [
+     "Avenida Circunvalar",
+     "Calle 5"
+    ]
+   }
+  ]
+ },
+ {
+  "codigos": [
+   "290-59949"
+  ],
+  "direccion": "Carrera 12A # 24-86, entre calles 24 y 25",
+  "intentos": [
+   {
+    "esquina": [
+     "Carrera 12A",
+     "Calle 24"
+    ]
+   },
+   {
+    "esquina": [
+     "Carrera 12 A",
+     "Calle 24"
+    ]
+   },
+   {
+    "esquina": [
+     "Carrera 12",
+     "Calle 24"
+    ]
+   }
+  ]
+ },
+ {
+  "codigos": [
+   "290-88416"
+  ],
+  "direccion": "Calle 8 # 12B-17, Conj. Palma de Mallorca, casa 25",
+  "intentos": [
+   {
+    "lugar": "Palma de Mallorca"
+   },
+   {
+    "esquina": [
+     "Calle 8",
+     "Carrera 12B"
+    ]
+   },
+   {
+    "esquina": [
+     "Calle 8",
+     "Carrera 12 B"
+    ]
+   },
+   {
+    "esquina": [
+     "Calle 8",
+     "Carrera 12"
+    ]
+   }
+  ]
+ },
+ {
+  "codigos": [
+   "290-158937"
+  ],
+  "direccion": "Avenida 30 de Agosto # 68-125, Edificio Cañaveral, local 25",
+  "intentos": [
+   {
+    "esquina": [
+     "Avenida 30 de Agosto",
+     "Calle 68"
+    ]
+   },
+   {
+    "esquina": [
+     "Avenida 30 de Agosto",
+     "Calle 67"
+    ]
+   },
+   {
+    "esquina": [
+     "Avenida 30 de Agosto",
+     "Calle 69"
+    ]
+   }
+  ]
+ }
+]

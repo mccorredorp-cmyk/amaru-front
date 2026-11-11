@@ -12,7 +12,7 @@ let promesa = null;
 // El back limita a 300 peticiones cada 15 min por IP (rate limit general) y
 // este resumen cuesta ~14 peticiones. Se guarda 10 min en sessionStorage para
 // no gastar el limite cada vez que se recarga la pagina.
-const CLAVE_CACHE = 'amaru:estadisticas';
+const CLAVE_CACHE = 'amaru:estadisticas:v2';
 const VIGENCIA_MS = 10 * 60 * 1000;
 
 function leerCache() {
@@ -52,7 +52,20 @@ async function consultarApi() {
   }
 
   const porCiudad = new Map();
-  for (const inmueble of paginas.flatMap((r) => r.data)) {
+  const todos = paginas.flatMap((r) => r.data);
+  // Los inmuebles de la ciudad beta se guardan para ponerlos uno a uno en el mapa.
+  const inmueblesBeta = todos
+    .filter((i) => i.ciudad && normalizar(i.ciudad) === normalizar(CIUDAD_BETA.ciudad))
+    .map((i) => ({
+      id: i.id,
+      codigo_sae: i.codigo_sae,
+      nombre: i.nombre,
+      tipo: i.tipo,
+      valor_arriendo: i.valor_arriendo,
+      estrato: i.estrato,
+      area_construida: i.area_construida,
+    }));
+  for (const inmueble of todos) {
     if (!inmueble.ciudad) continue;
     const actual = porCiudad.get(inmueble.ciudad) ?? {
       ciudad: inmueble.ciudad,
@@ -74,18 +87,19 @@ async function consultarApi() {
     porCiudad: [...porCiudad.values()].sort((a, b) => b.total - a.total),
     pereira: beta?.total ?? 0,
     desdePereira: beta?.desde ?? null,
+    inmueblesBeta,
     listo: true,
   };
 }
 
 export function useEstadisticas() {
-  const [stats, setStats] = useState({ listo: false, porCiudad: [] });
+  const [stats, setStats] = useState({ listo: false, porCiudad: [], inmueblesBeta: [] });
 
   useEffect(() => {
     let vigente = true;
     promesa ??= cargarTodo().catch((error) => {
       promesa = null; // permite reintentar en el próximo montaje
-      return { listo: true, error, porCiudad: [] };
+      return { listo: true, error, porCiudad: [], inmueblesBeta: [] };
     });
     promesa.then((s) => vigente && setStats(s));
     return () => {

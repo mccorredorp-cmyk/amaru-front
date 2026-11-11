@@ -1315,3 +1315,75 @@
         justify-content: center;
     }
 }
+
+/* ---------- Mapa: vista Pereira con un pin por inmueble ---------- */
+.mapa-vistas {
+    position: absolute;
+    top: 12px;
+    right: 12px;
+    z-index: 500;
+    display: flex;
+    gap: 4px;
+    padding: 4px;
+    border-radius: 999px;
+    background: rgba(255, 255, 255, 0.95);
+    box-shadow: 0 6px 18px rgba(31, 45, 58, 0.15);
+}
+
+.mapa-vistas button {
+    border: none;
+    background: none;
+    font: inherit;
+    font-size: 0.85rem;
+    font-weight: 700;
+    color: var(--texto-suave);
+    padding: 7px 14px;
+    border-radius: 999px;
+    cursor: pointer;
+    transition: background 0.2s, color 0.2s;
+}
+
+.mapa-vistas button.on {
+    background: var(--turquesa);
+    color: #fff;
+}
+
+.popup-sitio ul {
+    list-style: none;
+    margin: 6px 0 4px;
+    padding: 0 8px;
+    display: grid;
+    gap: 2px;
+    max-height: 180px;
+    overflow-y: auto;
+}
+
+.popup-sitio li button {
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    gap: 8px;
+    border: none;
+    background: none;
+    font: inherit;
+    font-size: 0.85rem;
+    padding: 6px 4px;
+    border-radius: 8px;
+    cursor: pointer;
+    color: var(--tinta);
+}
+
+.popup-sitio li button:hover {
+    background: var(--turquesa-claro);
+}
+
+.popup-sitio li b {
+    color: var(--naranja-oscuro);
+}
+
+.popup-sitio small {
+    display: block;
+    padding: 0 12px;
+    font-size: 0.72rem;
+    color: var(--texto-suave);
+}
