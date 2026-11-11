@@ -30,8 +30,8 @@ Frontend en **React** de AmaruHouse, la app de arriendos en Colombia con
 ## Instalación
 
 ```bash
-git clone https://github.com/Martin-Corr/amaruhouse-front.git
-cd amaruhouse-front
+git clone https://github.com/mccorredorp-cmyk/amaru-front.git
+cd amaru-front
 npm install
 cp .env.example .env      # en PowerShell: Copy-Item .env.example .env
 npm run dev
