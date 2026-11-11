@@ -9,7 +9,39 @@ import { normalizar } from '../utils/formato.js';
 
 let promesa = null;
 
+// El back limita a 300 peticiones cada 15 min por IP (rate limit general) y
+// este resumen cuesta ~14 peticiones. Se guarda 10 min en sessionStorage para
+// no gastar el limite cada vez que se recarga la pagina.
+const CLAVE_CACHE = 'amaru:estadisticas';
+const VIGENCIA_MS = 10 * 60 * 1000;
+
+function leerCache() {
+  try {
+    const guardado = JSON.parse(sessionStorage.getItem(CLAVE_CACHE) ?? 'null');
+    if (guardado && Date.now() - guardado.creado < VIGENCIA_MS) return guardado.datos;
+  } catch {
+    /* almacenamiento no disponible: se consulta la API */
+  }
+  return null;
+}
+
+function guardarCache(datos) {
+  try {
+    sessionStorage.setItem(CLAVE_CACHE, JSON.stringify({ creado: Date.now(), datos }));
+  } catch {
+    /* sin almacenamiento: no pasa nada */
+  }
+}
+
 async function cargarTodo() {
+  const enCache = leerCache();
+  if (enCache) return enCache;
+  const datos = await consultarApi();
+  guardarCache(datos);
+  return datos;
+}
+
+async function consultarApi() {
   const primera = await listarInmuebles({ page: 1, limit: 100 });
   const paginas = [primera];
   const totalPaginas = primera.meta.totalPages;
