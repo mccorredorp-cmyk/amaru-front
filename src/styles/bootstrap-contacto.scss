@@ -1,0 +1,52 @@
+// Bootstrap 5 solo para la sección de contacto (reto del curso).
+// Todo queda dentro de .bs-scope para no alterar el diseño propio del resto
+// de la página. Los colores se ajustan a la marca Amaru.
+
+@import 'bootstrap/scss/functions';
+
+// ---- Marca Amaru ----
+$primary: #0e8f8c;
+$success: #1f9d55;
+$warning: #f28c28;
+$dark: #1f2d3a;
+$body-color: #3d4b59;
+$font-family-sans-serif: 'Plus Jakarta Sans', system-ui, -apple-system, 'Segoe UI', sans-serif;
+$headings-font-family: 'Bricolage Grotesque', 'Plus Jakarta Sans', system-ui, sans-serif;
+$border-radius: 0.75rem;
+$border-radius-lg: 1.1rem;
+$border-radius-sm: 0.5rem;
+$input-focus-border-color: #0e8f8c;
+$input-btn-focus-color: rgba(14, 143, 140, 0.2);
+$accordion-button-active-bg: #e3f4f3;
+$accordion-button-active-color: #0a6f6d;
+
+@import 'bootstrap/scss/variables';
+@import 'bootstrap/scss/variables-dark';
+@import 'bootstrap/scss/maps';
+@import 'bootstrap/scss/mixins';
+@import 'bootstrap/scss/utilities';
+
+// Variables CSS (--bs-*) que necesitan los componentes. Solo definen
+// propiedades personalizadas en :root, no cambian estilos de la página.
+@import 'bootstrap/scss/root';
+
+.bs-scope {
+  font-family: $font-family-sans-serif;
+  color: $body-color;
+
+  @import 'bootstrap/scss/containers';
+  @import 'bootstrap/scss/grid';
+  @import 'bootstrap/scss/forms';
+  @import 'bootstrap/scss/buttons';
+  @import 'bootstrap/scss/transitions';
+  @import 'bootstrap/scss/card';
+  @import 'bootstrap/scss/accordion';
+  @import 'bootstrap/scss/alert';
+  @import 'bootstrap/scss/badge';
+  @import 'bootstrap/scss/list-group';
+  @import 'bootstrap/scss/close';
+  @import 'bootstrap/scss/toasts';
+  @import 'bootstrap/scss/spinners';
+  @import 'bootstrap/scss/helpers';
+  @import 'bootstrap/scss/utilities/api';
+}

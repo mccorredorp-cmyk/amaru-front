@@ -1,0 +1,47 @@
+// Coordenadas aproximadas (centro urbano) de las ciudades que aparecen en la
+// base. La API no trae coordenadas por inmueble, así que el mapa agrupa por
+// ciudad. Pereira es la ciudad beta.
+
+export const CIUDAD_BETA = { ciudad: 'Pereira', departamento: 'Risaralda' };
+
+export const COORDENADAS = {
+  'Bogotá D.C.': [4.711, -74.0721],
+  Cali: [3.4516, -76.532],
+  Buenaventura: [3.8801, -77.0312],
+  Medellín: [6.2442, -75.5812],
+  Barranquilla: [10.9685, -74.7813],
+  Bucaramanga: [7.1193, -73.1227],
+  'Cartagena de Indias': [10.391, -75.4794],
+  'San Andrés': [12.5847, -81.7006],
+  Fusagasugá: [4.3367, -74.3638],
+  Villavicencio: [4.142, -73.6266],
+  Pereira: [4.8133, -75.6961],
+  Dosquebradas: [4.8392, -75.6673],
+  Ibagué: [4.4389, -75.2322],
+  Cúcuta: [7.8939, -72.5078],
+  Montería: [8.7479, -75.8814],
+  Neiva: [2.9273, -75.2819],
+  Armenia: [4.5339, -75.6811],
+  Palmira: [3.5394, -76.3036],
+  'Santa Marta': [11.2408, -74.199],
+  Cartago: [4.7464, -75.9117],
+  Magangué: [9.2412, -74.7543],
+  Tuluá: [4.0847, -76.1954],
+  Girardot: [4.3032, -74.8037],
+  'Guadalajara de Buga': [3.9009, -76.2978],
+  Manizales: [5.0703, -75.5138],
+  Soacha: [4.5794, -74.2168],
+  Zipaquirá: [5.0221, -73.9937],
+  Floridablanca: [7.0622, -73.0864],
+  Rionegro: [6.1551, -75.3737],
+  Sincelejo: [9.3047, -75.3978],
+  Valledupar: [10.4631, -73.2532],
+  Tunja: [5.5353, -73.3678],
+  Popayán: [2.4448, -76.6147],
+  Pasto: [1.2136, -77.2811],
+  Yopal: [5.3378, -72.3959],
+  Leticia: [-4.2153, -69.9406],
+  Riohacha: [11.5444, -72.9072],
+  Florencia: [1.6144, -75.6062],
+  Arauca: [7.0847, -70.7591],
+};
