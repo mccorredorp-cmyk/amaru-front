@@ -2,6 +2,7 @@ import { useCallback, useEffect, useState } from 'react';
 import Header from './components/Header.jsx';
 import Hero from './components/Hero.jsx';
 import Inmuebles from './components/Inmuebles.jsx';
+import Favoritos from './components/Favoritos.jsx';
 import MapaCiudades from './components/MapaCiudades.jsx';
 import ComoFunciona from './components/ComoFunciona.jsx';
 import Equipo from './components/Equipo.jsx';
@@ -54,6 +55,7 @@ export default function App() {
       <main>
         <Hero filtros={filtros} onBuscar={aplicarFiltros} />
         <Inmuebles filtros={filtros} listo={inicializado || catalogos.error} onFiltrar={aplicarFiltros} onLimpiar={limpiarFiltros} />
+        <Favoritos />
         <MapaCiudades onElegirCiudad={aplicarFiltros} />
         <ComoFunciona />
         <Equipo />

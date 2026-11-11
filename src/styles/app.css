@@ -1189,3 +1189,129 @@
         background: var(--fondo);
     }
 }
+
+/* ---------- Mis favoritos ---------- */
+.fav-enlace {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 8px 12px;
+    border-radius: 999px;
+    border: 1px solid var(--borde);
+    color: var(--tinta);
+    font-weight: 600;
+    font-size: 0.9rem;
+    text-decoration: none;
+    transition: border-color 0.2s, background 0.2s, color 0.2s;
+}
+
+.fav-enlace > span:first-child {
+    color: #e8445a;
+}
+
+.fav-enlace:hover,
+.fav-enlace.active {
+    border-color: #f4b6c0;
+    background: #fff0f2;
+}
+
+.fav-contador {
+    min-width: 20px;
+    height: 20px;
+    padding: 0 6px;
+    border-radius: 999px;
+    background: #e8445a;
+    color: #fff;
+    font-size: 0.72rem;
+    line-height: 20px;
+    text-align: center;
+}
+
+.favoritos-vacio p {
+    color: var(--texto-suave);
+    line-height: 1.6;
+    margin: 0;
+}
+
+.favoritos-vacio strong {
+    color: var(--tinta);
+}
+
+.favoritos-icono {
+    width: 72px;
+    height: 72px;
+    border-radius: 50%;
+    display: grid;
+    place-items: center;
+    color: #e8445a;
+    background: #fff0f2;
+}
+
+/* Escritorio: el logo nunca se encoge y el menú cede espacio */
+@media (min-width: 901px) {
+    .nav-acciones .nav-cta {
+        column-gap: 0.3em;
+    }
+
+    .header-content {
+        gap: 20px;
+    }
+
+    .logo-brand {
+        flex-shrink: 0;
+    }
+
+    .nav {
+        gap: 18px;
+        min-width: 0;
+    }
+
+    .nav-links {
+        gap: 2px;
+    }
+
+    .nav-links a {
+        white-space: nowrap;
+        padding: 8px 11px;
+    }
+}
+
+@media (min-width: 901px) and (max-width: 1180px) {
+    .beta-chip {
+        display: none;
+    }
+
+    .nav {
+        gap: 10px;
+    }
+
+    .nav-links a {
+        padding: 8px 7px;
+        font-size: 0.84rem;
+    }
+
+    .nav-acciones .nav-cta {
+        padding-inline: 16px;
+    }
+
+    .nav-cta-largo {
+        display: none;
+    }
+}
+
+/* En escritorio angosto el botón queda solo con el corazón y el contador */
+@media (max-width: 1440px) and (min-width: 901px) {
+    .fav-enlace {
+        padding: 8px 10px;
+    }
+
+    .fav-enlace-texto {
+        display: none;
+    }
+}
+
+@media (max-width: 900px) {
+    .fav-enlace {
+        justify-content: center;
+    }
+}

@@ -4,7 +4,7 @@ import { capitalizar, formatoArea, formatoCOP } from '../utils/formato.js';
 import { fotoReferencia } from '../utils/fotos.js';
 
 export default function TarjetaInmueble({ inmueble }) {
-  const { favoritos, alternarFavorito, mostrarToast, abrirModal } = useApp();
+  const { favoritos, alternarFavorito, abrirModal } = useApp();
   const [fotoRota, setFotoRota] = useState(false);
   const esFavorito = favoritos.has(inmueble.id);
   const fotoReal = inmueble.imagen_principal?.miniatura_url;
@@ -13,8 +13,7 @@ export default function TarjetaInmueble({ inmueble }) {
 
   const favorito = (e) => {
     e.stopPropagation();
-    const agregado = alternarFavorito(inmueble.id);
-    mostrarToast(agregado ? 'Guardado en favoritos' : 'Quitado de favoritos');
+    alternarFavorito(inmueble);
   };
 
   const verDetalle = () => abrirModal('detalle', inmueble.id);

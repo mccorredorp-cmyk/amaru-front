@@ -7,7 +7,7 @@ import { fotoReferencia } from '../utils/fotos.js';
 import Modal360, { PANORAMA_DEMO } from './tour360/Modal360.jsx';
 
 export default function DetalleInmueble({ id }) {
-  const { cerrarModal, favoritos, alternarFavorito, mostrarToast } = useApp();
+  const { cerrarModal, favoritos, alternarFavorito, actualizarFavorito, mostrarToast } = useApp();
   const [inmueble, setInmueble] = useState(null);
   const [error, setError] = useState(null);
   const [fotoActiva, setFotoActiva] = useState(0);
@@ -20,11 +20,12 @@ export default function DetalleInmueble({ id }) {
     obtenerInmueble(id)
       .then((i) => {
         setInmueble(i);
+        actualizarFavorito(i); // si está en favoritos, deja su copia al día
         const principal = i.imagenes.findIndex((im) => im.es_principal);
         setFotoActiva(principal >= 0 ? principal : 0);
       })
       .catch(setError);
-  }, [id]);
+  }, [id, actualizarFavorito]);
 
   useEffect(cargar, [cargar]);
 
@@ -187,7 +188,7 @@ export default function DetalleInmueble({ id }) {
             <button
               type="button"
               className={`btn btn-ghost detalle-fav${favoritos.has(inmueble.id) ? ' activo' : ''}`}
-              onClick={() => mostrarToast(alternarFavorito(inmueble.id) ? 'Guardado en favoritos' : 'Quitado de favoritos')}
+              onClick={() => alternarFavorito(inmueble)}
             >
               ♥ {favoritos.has(inmueble.id) ? 'En favoritos' : 'Guardar en favoritos'}
             </button>

@@ -14,7 +14,8 @@ Frontend en **React** de AmaruHouse, la app de arriendos en Colombia con
   tocar una ciudad filtra el listado.
 - **Cuenta de usuario**: registro, ingreso y cierre de sesión con cookies httpOnly.
 - **Publicar inmueble** (`POST /inmuebles`) y **subir fotos** (`POST /inmuebles/{id}/imagenes`).
-- **Favoritos** guardados en el navegador.
+- **Mis favoritos**: sección con la lista de cada cuenta (hay que ingresar para
+  guardar), contador en el menú y orden por fecha o precio.
 - **Tour 360°** con Three.js en el detalle de cada inmueble.
 - **Equipo**: tarjetas de los creadores con perfil que se abre con zoom.
 - **Contacto hecho con React-Bootstrap** (reto del curso): `Row`/`Col`, `Card`,
@@ -117,6 +118,10 @@ envíe, el botón cambia de "Demo 360°" a "Ver en 360°" con la foto real.
 - La API no trae coordenadas por inmueble, así que el mapa agrupa por ciudad.
 - Los inmuebles importados del CSV no tienen fotos: se muestra una foto de
   referencia marcada como tal hasta que el propietario suba las reales.
+- La API no tiene endpoint de favoritos: cada cuenta guarda su lista en el
+  navegador con la clave `amaru:favoritos:<idUsuario>`, así que no se comparte
+  entre dispositivos. Cuando el back tenga `GET/POST/DELETE /favoritos`, solo
+  cambia la parte de favoritos de `AppContext.jsx`.
 
 ## Equipo
 

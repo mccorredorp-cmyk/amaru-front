@@ -11,7 +11,7 @@ const ENLACES = [
 ];
 
 export default function Header() {
-  const { usuario, logout, abrirModal, mostrarToast } = useApp();
+  const { usuario, logout, abrirModal, mostrarToast, favoritos } = useApp();
   const [abierto, setAbierto] = useState(false);
   const [conSombra, setConSombra] = useState(false);
   const [activo, setActivo] = useState('inicio');
@@ -28,7 +28,7 @@ export default function Header() {
       (entradas) => entradas.forEach((e) => e.isIntersecting && setActivo(e.target.id)),
       { rootMargin: '-45% 0px -50% 0px' },
     );
-    ENLACES.forEach(([id]) => {
+    [...ENLACES.map(([id]) => id), 'favoritos'].forEach((id) => {
       const el = document.getElementById(id);
       if (el) observer.observe(el);
     });
@@ -73,6 +73,17 @@ export default function Header() {
             ))}
           </ul>
           <div className="nav-acciones">
+            <a
+              href="#favoritos"
+              className={`fav-enlace${activo === 'favoritos' ? ' active' : ''}`}
+              onClick={cerrar}
+              aria-label={usuario ? `Mis favoritos: ${favoritos.size}` : 'Mis favoritos'}
+              title="Mis favoritos"
+            >
+              <span aria-hidden="true">♥</span>
+              <span className="fav-enlace-texto">Favoritos</span>
+              {usuario && favoritos.size > 0 && <span className="fav-contador">{favoritos.size}</span>}
+            </a>
             {usuario ? (
               <div className="usuario-chip" title={usuario.email}>
                 <span className="usuario-avatar" aria-hidden="true">
@@ -96,7 +107,7 @@ export default function Header() {
               </button>
             )}
             <button type="button" className="btn btn-primary nav-cta" onClick={publicar}>
-              Publicar inmueble
+              Publicar<span className="nav-cta-largo">inmueble</span>
             </button>
           </div>
         </nav>
