@@ -272,33 +272,6 @@
     width: 220px !important;
 }
 
-/* ---------- Equipo ---------- */
-.foto-equipo {
-    aspect-ratio: 4 / 3;
-}
-
-.foto-equipo img {
-    object-position: center 30%;
-}
-
-.miembro-foto {
-    display: grid;
-    place-items: center;
-}
-
-.miembro-foto img,
-.modal-foto img {
-    object-position: center top;
-}
-
-.modal-foto {
-    overflow: hidden;
-}
-
-.modal-bloque p {
-    color: var(--texto);
-}
-
 /* ---------- Modales de la app (detalle, ingreso, publicar) ---------- */
 .modal-app {
     position: fixed;
@@ -886,8 +859,8 @@
     pointer-events: none;
 }
 
-/* ---------- Tour 360° (Three.js) ---------- */
-.boton-360 {
+/* ---------- Recorrido 3D de demostración (Three.js) ---------- */
+.boton-3d {
     position: absolute;
     left: 14px;
     bottom: 14px;
@@ -907,24 +880,29 @@
     transition: transform 0.2s ease, background 0.2s ease;
 }
 
-.boton-360:hover {
+.boton-3d small {
+    font-weight: 500;
+    color: #c5d0da;
+}
+
+.boton-3d:hover {
     background: var(--turquesa-oscuro);
     transform: translateY(-2px);
 }
 
-.boton-360-icono {
+.boton-3d-icono {
     display: grid;
     place-items: center;
     width: 38px;
     height: 38px;
     border-radius: 50%;
     background: var(--naranja);
-    font-size: 0.72rem;
+    font-size: 0.78rem;
     font-weight: 800;
-    animation: pulso360 2.4s ease-in-out infinite;
+    animation: pulso3d 2.4s ease-in-out infinite;
 }
 
-@keyframes pulso360 {
+@keyframes pulso3d {
     0%, 100% { box-shadow: 0 0 0 0 rgba(242, 140, 40, 0.6); }
     50% { box-shadow: 0 0 0 8px rgba(242, 140, 40, 0); }
 }
@@ -936,33 +914,29 @@
     background: var(--tinta);
 }
 
-.modal-360 .modal-cerrar {
+.modal-3d .modal-cerrar {
     z-index: 5;
 }
 
-.tour360 {
+.visor3d {
     position: relative;
     width: 100%;
     height: 100%;
-    background: var(--tinta);
+    background: #e7efee;
     touch-action: none;
     user-select: none;
     cursor: grab;
 }
 
-.tour360:active {
+.visor3d:active {
     cursor: grabbing;
 }
 
-.tour360:fullscreen {
-    border-radius: 0;
-}
-
-.tour360 canvas {
+.visor3d canvas {
     display: block;
 }
 
-.tour-etiqueta {
+.visor-etiqueta {
     position: absolute;
     top: 16px;
     left: 16px;
@@ -971,14 +945,18 @@
     gap: 12px;
     padding: 8px 16px 8px 8px;
     border-radius: 999px;
-    background: rgba(31, 45, 58, 0.78);
+    background: rgba(31, 45, 58, 0.85);
     backdrop-filter: blur(8px);
     color: #fff;
     max-width: calc(100% - 100px);
     pointer-events: none;
 }
 
-.tour-etiqueta strong {
+.visor-etiqueta > div {
+    min-width: 0;
+}
+
+.visor-etiqueta strong {
     display: block;
     font-size: 0.92rem;
     white-space: nowrap;
@@ -986,16 +964,16 @@
     text-overflow: ellipsis;
 }
 
-.tour-etiqueta small {
+.visor-etiqueta small {
+    display: block;
     color: #c5d0da;
     font-size: 0.78rem;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
 }
 
-.tour-etiqueta > div {
-    min-width: 0;
-}
-
-.tour-badge {
+.visor-badge {
     flex-shrink: 0;
     display: grid;
     place-items: center;
@@ -1004,38 +982,55 @@
     border-radius: 50%;
     background: var(--naranja);
     font-weight: 800;
-    font-size: 0.78rem;
+    font-size: 0.85rem;
 }
 
-.tour-ayuda {
+/* El aviso de demostración siempre está visible: no es el inmueble real. */
+.visor-aviso {
+    position: absolute;
+    top: 78px;
+    left: 16px;
+    max-width: min(440px, calc(100% - 32px));
+    margin: 0;
+    padding: 8px 14px;
+    border-radius: var(--radio-md);
+    background: var(--naranja-claro);
+    border: 1px solid #f6c18f;
+    color: var(--tinta);
+    font-size: 0.8rem;
+    line-height: 1.45;
+    pointer-events: none;
+}
+
+.visor-aviso b {
+    display: inline-block;
+    margin-right: 6px;
+    padding: 1px 8px;
+    border-radius: 999px;
+    background: var(--naranja);
+    color: #fff;
+    font-size: 0.7rem;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+}
+
+.visor-ayuda {
     position: absolute;
     left: 50%;
-    top: 50%;
-    transform: translate(-50%, -50%);
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 8px;
-    padding: 18px 26px;
-    border-radius: var(--radio-lg);
-    background: rgba(31, 45, 58, 0.6);
+    bottom: 84px;
+    transform: translateX(-50%);
+    padding: 8px 16px;
+    border-radius: 999px;
+    background: rgba(31, 45, 58, 0.75);
     color: #fff;
-    font-weight: 700;
+    font-size: 0.82rem;
+    font-weight: 600;
+    white-space: nowrap;
     pointer-events: none;
     animation: aparecer 0.4s ease;
 }
 
-.tour-mano {
-    font-size: 2rem;
-    animation: deslizar 1.6s ease-in-out infinite;
-}
-
-@keyframes deslizar {
-    0%, 100% { transform: translateX(-14px); }
-    50% { transform: translateX(14px); }
-}
-
-.tour-controles {
+.visor-controles {
     position: absolute;
     left: 50%;
     bottom: 18px;
@@ -1045,12 +1040,12 @@
     gap: 6px;
     padding: 6px;
     border-radius: 999px;
-    background: rgba(31, 45, 58, 0.82);
+    background: rgba(31, 45, 58, 0.85);
     backdrop-filter: blur(8px);
     max-width: calc(100% - 24px);
 }
 
-.tour-controles button {
+.visor-controles button {
     width: 42px;
     height: 42px;
     border: none;
@@ -1064,40 +1059,15 @@
     transition: background 0.2s ease;
 }
 
-.tour-controles button:hover {
+.visor-controles button:hover {
     background: rgba(255, 255, 255, 0.22);
 }
 
-.tour-controles button.on {
+.visor-controles button.on {
     background: var(--turquesa);
 }
 
-.tour-subir {
-    display: inline-flex;
-    align-items: center;
-    height: 42px;
-    padding: 0 16px;
-    border-radius: 999px;
-    background: var(--naranja);
-    color: #fff;
-    font-weight: 700;
-    font-size: 0.85rem;
-    white-space: nowrap;
-    cursor: pointer;
-}
-
-.tour-subir:hover {
-    background: var(--naranja-oscuro);
-}
-
-.tour-subir input {
-    position: absolute;
-    width: 1px;
-    height: 1px;
-    opacity: 0;
-}
-
-.tour-mensaje {
+.visor-mensaje {
     position: absolute;
     inset: 0;
     display: flex;
@@ -1105,21 +1075,20 @@
     align-items: center;
     justify-content: center;
     gap: 10px;
-    color: #fff;
+    color: var(--tinta);
     text-align: center;
     padding: 24px;
-    pointer-events: none;
 }
 
-.tour-mensaje span {
-    color: #c5d0da;
+.visor-mensaje span {
+    color: var(--texto-suave);
 }
 
-.tour-spinner {
+.visor-spinner {
     width: 38px;
     height: 38px;
     border-radius: 50%;
-    border: 4px solid rgba(255, 255, 255, 0.2);
+    border: 4px solid rgba(31, 45, 58, 0.15);
     border-top-color: var(--naranja);
     animation: girar 0.9s linear infinite;
 }
@@ -1133,15 +1102,18 @@
         height: calc(100dvh - 16px);
     }
 
-    .tour-controles button {
+    .visor-controles button {
         width: 38px;
         height: 38px;
     }
 
-    .tour-subir {
-        height: 38px;
-        padding: 0 12px;
-        font-size: 0.78rem;
+    .visor-aviso {
+        top: 72px;
+        font-size: 0.75rem;
+    }
+
+    .visor-ayuda {
+        display: none;
     }
 }
 
@@ -1386,4 +1358,255 @@
     padding: 0 12px;
     font-size: 0.72rem;
     color: var(--texto-suave);
+}
+
+/* ---------- Mis inmuebles ---------- */
+.mis-enlace > svg {
+    color: var(--turquesa);
+}
+
+.mis-enlace:hover,
+.mis-enlace.active {
+    border-color: var(--turquesa);
+    background: var(--turquesa-claro);
+}
+
+.mis-icono {
+    color: var(--turquesa);
+    background: var(--turquesa-claro);
+}
+
+.mis-inmuebles .controles-lista {
+    align-items: center;
+}
+
+.card-acciones {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 8px;
+    margin-top: 14px;
+    padding-top: 14px;
+    border-top: 1px solid var(--borde);
+}
+
+.card-acciones .btn,
+.detalle-dueno .btn {
+    padding: 9px 14px;
+    font-size: 0.88rem;
+}
+
+.btn-peligro {
+    background: transparent;
+    color: #c0392b;
+    border: 1.5px solid #f1c4be;
+}
+
+.btn-peligro:hover {
+    background: #fdf0ee;
+    border-color: #c0392b;
+}
+
+.btn-peligro-solido {
+    background: #c0392b;
+    color: #fff;
+    border: 1.5px solid #c0392b;
+}
+
+.btn-peligro-solido:hover {
+    background: #a5301f;
+}
+
+.detalle-dueno {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 8px;
+}
+
+.confirmar-eliminar {
+    text-align: center;
+}
+
+.confirmar-eliminar .form-acciones {
+    justify-content: center;
+}
+
+.confirmar-icono {
+    width: 60px;
+    height: 60px;
+    margin: 0 auto 8px;
+    border-radius: 50%;
+    display: grid;
+    place-items: center;
+    color: #c0392b;
+    background: #fdf0ee;
+}
+
+/* ---------- Fotos de referencia ---------- */
+.detalle-nota-ref {
+    display: block;
+    margin-top: 8px;
+    font-size: 0.8rem;
+    color: var(--texto-suave);
+}
+
+/* ---------- Nosotros (institucional) ---------- */
+.nosotros-top {
+    display: grid;
+    grid-template-columns: 1.1fr 0.9fr;
+    gap: 56px;
+    align-items: center;
+}
+
+.nosotros-intro h2 {
+    margin-bottom: 18px;
+}
+
+.nosotros-texto {
+    color: var(--texto);
+    font-size: 1.02rem;
+    line-height: 1.75;
+    max-width: 62ch;
+}
+
+.nosotros-texto + .nosotros-texto {
+    margin-top: 14px;
+}
+
+.nosotros-imagen {
+    position: relative;
+    aspect-ratio: 4 / 3;
+    border-radius: var(--radio-xl);
+    overflow: hidden;
+    background: var(--turquesa-claro);
+    box-shadow: var(--sombra-md);
+}
+
+.nosotros-imagen > img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.nosotros-imagen figcaption {
+    position: absolute;
+    left: 16px;
+    bottom: 16px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 8px 16px 8px 10px;
+    border-radius: 999px;
+    background: rgba(255, 255, 255, 0.95);
+    box-shadow: var(--sombra-sm);
+}
+
+.nosotros-imagen figcaption img {
+    width: 30px;
+    height: 30px;
+    object-fit: contain;
+}
+
+.nosotros-imagen figcaption span {
+    display: flex;
+    flex-direction: column;
+    line-height: 1.15;
+}
+
+.nosotros-imagen figcaption b {
+    font-family: var(--font-titulos);
+    color: var(--tinta);
+}
+
+.nosotros-imagen figcaption small {
+    font-size: 0.75rem;
+    color: var(--texto-suave);
+}
+
+.nosotros-pilares {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 24px;
+    margin-top: 56px;
+}
+
+.nosotros-pilar {
+    padding: 28px 30px;
+    background: var(--superficie);
+    border: 1px solid var(--borde);
+    border-left: 4px solid var(--turquesa);
+    border-radius: var(--radio-lg);
+}
+
+.nosotros-pilar:last-child {
+    border-left-color: var(--naranja);
+}
+
+.nosotros-pilar h3 {
+    font-size: 1.25rem;
+    margin-bottom: 10px;
+}
+
+.nosotros-pilar p {
+    color: var(--texto);
+    line-height: 1.7;
+}
+
+.nosotros-valores {
+    margin-top: 48px;
+}
+
+.nosotros-valores > h3 {
+    font-size: 1.25rem;
+    margin-bottom: 18px;
+}
+
+.nosotros-valores ul {
+    list-style: none;
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 20px;
+}
+
+.nosotros-valores li {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    padding: 22px;
+    border-radius: var(--radio-lg);
+    background: var(--turquesa-claro);
+}
+
+.nosotros-valores h4 {
+    color: var(--tinta);
+    margin-bottom: 4px;
+}
+
+.nosotros-valores p {
+    font-size: 0.9rem;
+    color: var(--texto-suave);
+    line-height: 1.6;
+}
+
+/* Las media queries van aquí (y no en estilos.css) porque app.css se carga
+   después: con la misma especificidad, la última regla gana. */
+@media (max-width: 1024px) {
+    .nosotros-top {
+        grid-template-columns: 1fr;
+        gap: 32px;
+    }
+
+    .nosotros-valores ul {
+        grid-template-columns: 1fr 1fr;
+    }
+}
+
+@media (max-width: 640px) {
+    .nosotros-pilares,
+    .nosotros-valores ul {
+        grid-template-columns: 1fr;
+    }
+
+    .nosotros-pilar {
+        padding: 22px;
+    }
 }

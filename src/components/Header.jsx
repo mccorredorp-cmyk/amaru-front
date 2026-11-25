@@ -6,7 +6,7 @@ const ENLACES = [
   ['propiedades', 'Inmuebles'],
   ['mapa', 'Mapa'],
   ['como-funciona', 'Cómo funciona'],
-  ['equipo', 'Nosotros'],
+  ['nosotros', 'Nosotros'],
   ['contacto', 'Contacto'],
 ];
 
@@ -28,12 +28,13 @@ export default function Header() {
       (entradas) => entradas.forEach((e) => e.isIntersecting && setActivo(e.target.id)),
       { rootMargin: '-45% 0px -50% 0px' },
     );
-    [...ENLACES.map(([id]) => id), 'favoritos'].forEach((id) => {
+    // 'mis-inmuebles' solo existe con sesión: por eso el efecto depende de usuario.
+    [...ENLACES.map(([id]) => id), 'favoritos', 'mis-inmuebles'].forEach((id) => {
       const el = document.getElementById(id);
       if (el) observer.observe(el);
     });
     return () => observer.disconnect();
-  }, []);
+  }, [usuario]);
 
   useEffect(() => {
     document.body.classList.toggle('sin-scroll', abierto);
@@ -73,6 +74,20 @@ export default function Header() {
             ))}
           </ul>
           <div className="nav-acciones">
+            {usuario && (
+              <a
+                href="#mis-inmuebles"
+                className={`fav-enlace mis-enlace${activo === 'mis-inmuebles' ? ' active' : ''}`}
+                onClick={cerrar}
+                aria-label="Mis inmuebles"
+                title="Mis inmuebles"
+              >
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+                  <path d="M3 10.5 12 3l9 7.5V20a1 1 0 0 1-1 1h-5v-6H9v6H4a1 1 0 0 1-1-1z" />
+                </svg>
+                <span className="fav-enlace-texto">Mis inmuebles</span>
+              </a>
+            )}
             <a
               href="#favoritos"
               className={`fav-enlace${activo === 'favoritos' ? ' active' : ''}`}

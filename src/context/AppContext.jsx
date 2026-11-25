@@ -57,8 +57,15 @@ export function AppProvider({ children }) {
     timer.current = setTimeout(() => setToast((t) => ({ ...t, visible: false })), 3200);
   }, []);
 
+  // ---------- Cambios en inmuebles ----------
+  // Contador que sube cada vez que el usuario publica, edita o borra. Las listas
+  // (general y "Mis inmuebles") lo ponen en las dependencias de su useEffect y
+  // así se recargan solas, sin pasarse callbacks entre componentes hermanos.
+  const [versionInmuebles, setVersionInmuebles] = useState(0);
+  const avisarCambioInmuebles = useCallback(() => setVersionInmuebles((v) => v + 1), []);
+
   // ---------- Modales ----------
-  // { tipo: 'auth' | 'publicar' | 'detalle', datos }
+  // { tipo: 'auth' | 'publicar' | 'editar' | 'eliminar' | 'detalle', datos }
   const [modal, setModal] = useState(null);
   const abrirModal = useCallback((tipo, datos = null) => setModal({ tipo, datos }), []);
   const cerrarModal = useCallback(() => setModal(null), []);
@@ -148,6 +155,18 @@ export function AppProvider({ children }) {
     [usuario, guardarLista],
   );
 
+  /** Quita un inmueble borrado de la lista de favoritos de la cuenta. */
+  const quitarFavorito = useCallback(
+    (id) => {
+      if (!usuario || !listaRef.current.some((f) => f.id === id)) return;
+      guardarLista(
+        usuario.id,
+        listaRef.current.filter((f) => f.id !== id),
+      );
+    },
+    [usuario, guardarLista],
+  );
+
   const valor = useMemo(
     () => ({
       usuario,
@@ -161,13 +180,16 @@ export function AppProvider({ children }) {
       favoritosLista,
       alternarFavorito,
       actualizarFavorito,
+      quitarFavorito,
+      versionInmuebles,
+      avisarCambioInmuebles,
       toast,
       mostrarToast,
       modal,
       abrirModal,
       cerrarModal,
     }),
-    [usuario, sesionLista, login, registro, logout, catalogos, cargarCatalogos, favoritos, favoritosLista, alternarFavorito, actualizarFavorito, toast, mostrarToast, modal, abrirModal, cerrarModal],
+    [usuario, sesionLista, login, registro, logout, catalogos, cargarCatalogos, favoritos, favoritosLista, alternarFavorito, actualizarFavorito, quitarFavorito, versionInmuebles, avisarCambioInmuebles, toast, mostrarToast, modal, abrirModal, cerrarModal],
   );
 
   return <AppContext.Provider value={valor}>{children}</AppContext.Provider>;

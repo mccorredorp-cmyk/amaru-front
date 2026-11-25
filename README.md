@@ -14,10 +14,17 @@ Frontend en **React** de AmaruHouse, la app de arriendos en Colombia con
   tocar una ciudad filtra el listado.
 - **Cuenta de usuario**: registro, ingreso y cierre de sesión con cookies httpOnly.
 - **Publicar inmueble** (`POST /inmuebles`) y **subir fotos** (`POST /inmuebles/{id}/imagenes`).
+- **Mis inmuebles**: con sesión aparece una sección (y un acceso en el menú) con
+  solo los inmuebles que publicó la cuenta (`GET /inmuebles/mios`), filtro por
+  estado, **editar** (mismo formulario de publicar; el `PATCH` lleva solo los
+  campos que cambiaron) y **eliminar** con confirmación. El back vuelve a
+  comprobar que quien edita o borra sea el dueño.
 - **Mis favoritos**: sección con la lista de cada cuenta (hay que ingresar para
   guardar), contador en el menú y orden por fecha o precio.
-- **Tour 360°** con Three.js en el detalle de cada inmueble.
-- **Equipo**: tarjetas de los creadores con perfil que se abre con zoom.
+- **Recorrido 3D de demostración** con Three.js en el detalle de cada inmueble.
+- **Nosotros**: sección institucional (quiénes somos, misión, visión y valores)
+  con una sola imagen representativa. El texto está en `src/data/nosotros.js`
+  para ajustarlo sin tocar el diseño.
 - **Contacto hecho con React-Bootstrap** (reto del curso): `Row`/`Col`, `Card`,
   `Form` con validación y `FloatingLabel`, `ListGroup`, `Accordion`, `Badge`,
   `Alert`, `Spinner` y `Toast`.
@@ -67,10 +74,10 @@ src/
 ├── api/
 │   ├── cliente.js        # fetch con cookies, refresh único y errores de la API
 │   └── amaru.js          # una función por endpoint
-├── components/           # Header, Hero, Inmuebles, MapaCiudades, Equipo,
-│                         # Contacto (Bootstrap), modales de detalle, ingreso y publicar
+├── components/           # Header, Hero, Inmuebles, MapaCiudades,
+│                         # Contacto (Bootstrap), Nosotros, Mis inmuebles y modales
 ├── context/AppContext.jsx# sesión, catálogos, favoritos, toast y modales
-├── data/                 # equipo y coordenadas de las ciudades
+├── data/                 # texto de Nosotros y coordenadas de las ciudades
 ├── hooks/                # estadísticas por ciudad
 ├── styles/
 │   ├── estilos.css       # diseño original de Amaru
@@ -85,30 +92,27 @@ El reto pide usar Bootstrap en la sección de contactos. Para que no cambie el
 diseño del resto de la página, Bootstrap se compila con Sass **dentro de la
 clase `.bs-scope`**, con los colores de Amaru (turquesa y naranja).
 
-## Tour 360° con Three.js
+## Recorrido 3D de demostración (Three.js)
 
-En el detalle de cada inmueble, el botón **360°** abre un visor panorámico hecho
-con [Three.js](https://threejs.org) y
-[React Three Fiber](https://r3f.docs.pmnd.rs) (`src/components/tour360/`).
+En el detalle de cada inmueble, el botón **Recorrido 3D (demo)** abre un visor
+hecho con [Three.js](https://threejs.org) y
+[React Three Fiber](https://r3f.docs.pmnd.rs) (`src/components/demo3d/`).
 
-- La foto panorámica (proporción 2:1) se pega por dentro de una esfera y la
-  cámara queda en el centro: arrastrar para mirar, rueda o botones para zoom,
-  giro automático y pantalla completa.
-- Three.js se carga **solo cuando alguien abre el tour** (`React.lazy`), así la
-  página principal no se vuelve pesada en celulares.
-- **Probar mi foto 360°**: permite cargar una panorámica propia y verla al
-  instante, sin subirla al servidor.
-- Mientras el back no guarde fotos 360°, se muestra una panorámica de ejemplo.
-
-### Qué falta en el back para fotos 360° reales
-
-1. Aceptar panorámicas más grandes: hoy las fotos se reducen a 1600 px de ancho
-   y una 360° necesita entre 4000 y 6000 px para no verse borrosa.
-2. Marcar la foto como panorámica, por ejemplo con un campo `es_360` en
-   `inmueble_imagen` que llegue en `imagenes[]` del detalle.
-
-El front ya busca `imagenes.find((im) => im.es_360)`: en cuanto el back lo
-envíe, el botón cambia de "Demo 360°" a "Ver en 360°" con la foto real.
+- No hay planos reales de los inmuebles, así que hay **tres interiores
+  genéricos** construidos en código: apartaestudio, apartamento de dos
+  habitaciones y casa con sala-comedor (`modelos.jsx`). Todo son cajas y
+  cilindros de Three.js con materiales simples (`muebles.jsx`): no se descarga
+  ningún modelo 3D.
+- Cada inmueble recibe siempre el mismo interior: se elige con un hash de su
+  `id` (`modeloPara`).
+- El visor dice claramente que es una **demostración** y no el inmueble real.
+- Controles: arrastrar para orbitar, rueda o pellizco para zoom, botones de
+  acercar/alejar, giro automático, vista inicial y pantalla completa.
+- Rendimiento: Three.js se carga solo al abrir la demo (`React.lazy`) y el
+  Canvas usa `frameloop="demand"`, es decir, dibuja solo cuando algo se mueve.
+- Limpieza: al cerrar se liberan los controles, los materiales y la textura
+  compartidos (`dispose()`), y React Three Fiber libera geometrías y el
+  contexto WebGL.
 
 ## Pendientes conocidos
 
@@ -120,8 +124,14 @@ envíe, el botón cambia de "Demo 360°" a "Ver en 360°" con la foto real.
   guardadas en `src/data/ubicacionesPereira.js` (18 de 19; el de la Av. 30 de
   Agosto no se pudo ubicar). Los inmuebles nuevos no salen hasta que el back
   guarde latitud y longitud. El resto del país se agrupa por ciudad.
-- Los inmuebles importados del CSV no tienen fotos: se muestra una foto de
-  referencia marcada como tal hasta que el propietario suba las reales.
+- Los inmuebles importados del CSV no tienen fotos: se muestran **fotos de
+  referencia según el tipo** (`src/utils/fotos.js`). Los 18 tipos del catálogo
+  se agrupan en 12 categorías visuales (apartamento, casa, casa de recreo,
+  finca, lote, local, oficina, consultorio, parqueadero, bodega, habitación,
+  edificio), cada una con varias fotos revisadas a mano. La foto se elige con
+  un hash del id, así el mismo inmueble siempre muestra la misma, y el detalle
+  arma una galería de la misma categoría. Todo va marcado como "Referencia" y
+  las fotos reales que sube el dueño siempre tienen prioridad.
 - La API no tiene endpoint de favoritos: cada cuenta guarda su lista en el
   navegador con la clave `amaru:favoritos:<idUsuario>`, así que no se comparte
   entre dispositivos. Cuando el back tenga `GET/POST/DELETE /favoritos`, solo

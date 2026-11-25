@@ -2,7 +2,7 @@ import { useEffect, useRef } from 'react';
 import { createPortal } from 'react-dom';
 
 // Pila de modales abiertos: permite abrir uno encima de otro (por ejemplo el
-// tour 360° sobre el detalle) y que Esc cierre solo el de arriba.
+// recorrido 3D sobre el detalle) y que Esc cierre solo el de arriba.
 const pila = [];
 
 /**

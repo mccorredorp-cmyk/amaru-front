@@ -23,6 +23,28 @@ function CambiarVista({ vista }) {
   return null;
 }
 
+// Tiles de OpenStreetMap. Antes se usaban los de CARTO (basemaps.cartocdn.com),
+// pero CARTO ahora exige API key: respondia 200 con una imagen que dice
+// "API KEY REQUIRED", asi que el mapa cargaba "bien" pero se veia vacio.
+// Los tiles estandar de OSM son libres para trafico bajo citando la fuente.
+const URL_TILES = 'https://tile.openstreetmap.org/{z}/{x}/{y}.png';
+const ATRIBUCION = '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>';
+
+/**
+ * Leaflet mide su contenedor UNA vez al crearse. Si despues cambia de tamano
+ * (grid responsive, fuentes que cargan tarde, rotar el celular) quedan zonas
+ * grises: invalidateSize() le pide volver a medir.
+ */
+function AjustarTamano() {
+  const mapa = useMap();
+  useEffect(() => {
+    const observador = new ResizeObserver(() => mapa.invalidateSize());
+    observador.observe(mapa.getContainer());
+    return () => observador.disconnect();
+  }, [mapa]);
+  return null;
+}
+
 const plural = (n, uno, varios) => `${n} ${n === 1 ? uno : varios}`;
 
 const icono = (texto, beta) =>
@@ -146,12 +168,8 @@ export default function MapaCiudades({ onElegirCiudad }) {
             </div>
             <MapContainer center={VISTAS.pereira.centro} zoom={VISTAS.pereira.zoom} scrollWheelZoom={false} className="mapa-leaflet" aria-label="Mapa de inmuebles">
               <CambiarVista vista={vista} />
-              <TileLayer
-                attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> &copy; <a href="https://carto.com/attributions">CARTO</a>'
-                url="https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png"
-                subdomains="abcd"
-                maxZoom={19}
-              />
+              <AjustarTamano />
+              <TileLayer attribution={ATRIBUCION} url={URL_TILES} maxZoom={19} />
               {vista === 'pereira' &&
                 sitiosPereira.map((sitio) => (
                   <Marker

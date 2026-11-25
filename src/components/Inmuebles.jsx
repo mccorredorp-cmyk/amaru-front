@@ -23,7 +23,7 @@ const ORDENES = {
 };
 
 export default function Inmuebles({ filtros, listo, onFiltrar, onLimpiar }) {
-  const { catalogos, usuario } = useApp();
+  const { catalogos, usuario, versionInmuebles } = useApp();
   const [orden, setOrden] = useState('recientes');
   const [items, setItems] = useState([]);
   const [meta, setMeta] = useState(null);
@@ -78,7 +78,7 @@ export default function Inmuebles({ filtros, listo, onFiltrar, onLimpiar }) {
         setEstado('error');
       });
     return () => ac.abort();
-  }, [consulta, listo, reintento, usuario]);
+  }, [consulta, listo, reintento, usuario, versionInmuebles]);
 
   const cargarMas = () => {
     const siguiente = pagina + 1;

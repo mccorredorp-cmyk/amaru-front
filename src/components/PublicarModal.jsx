@@ -3,7 +3,7 @@ import Modal from './Modal.jsx';
 import { Campo } from './AuthModal.jsx';
 import { useApp } from '../context/AppContext.jsx';
 import { useCiudades } from './SelectorUbicacion.jsx';
-import { publicarInmueble, subirImagenes } from '../api/amaru.js';
+import { actualizarInmueble, publicarInmueble, subirImagenes } from '../api/amaru.js';
 
 const VACIO = {
   tipo_inmueble: '',
@@ -18,14 +18,84 @@ const VACIO = {
   nombre_contacto: '',
   telefono_contacto: '',
   correo_contacto: '',
+  estado_inmueble: 'Disponible',
 };
+
+const ESTADOS = ['Disponible', 'Arrendado', 'No disponible'];
+
+/** Convierte un inmueble de la API en los valores del formulario (modo edición). */
+function formDesde(inmueble, departamentos) {
+  const depto = departamentos.find((d) => d.nombre === inmueble.departamento);
+  return {
+    tipo_inmueble: inmueble.tipo,
+    idDepartamento: depto ? String(depto.id) : '',
+    ciudad: inmueble.ciudad ?? '',
+    direccion: inmueble.direccion ?? '',
+    nombre_inmueble: inmueble.nombre ?? '',
+    estrato: inmueble.estrato ? String(inmueble.estrato) : '',
+    valor_arriendo: inmueble.valor_arriendo ? String(inmueble.valor_arriendo) : '',
+    area_construida: inmueble.area_construida ? String(inmueble.area_construida) : '',
+    mas_admon: Boolean(inmueble.mas_admon),
+    nombre_contacto: inmueble.contacto?.nombre ?? '',
+    telefono_contacto: inmueble.contacto?.telefono ?? '',
+    correo_contacto: inmueble.contacto?.correo ?? '',
+    estado_inmueble: inmueble.estado ?? 'Disponible',
+  };
+}
+
+const numeroONull = (v) => (v === '' ? null : Number(v));
+
+/**
+ * PATCH solo con lo que cambió. Así se respeta la semántica del back: un campo
+ * ausente no se toca y `null` vacía un dato opcional. Mandar todo el formulario
+ * funcionaría, pero, por ejemplo, crearía otro contacto aunque no se tocara.
+ */
+function construirCambios(form, inicial, departamento) {
+  const c = {};
+  const cambio = (campo) => form[campo] !== inicial[campo];
+
+  if (cambio('tipo_inmueble')) c.tipo_inmueble = form.tipo_inmueble;
+  if (cambio('idDepartamento')) c.departamento = departamento.nombre;
+  if (cambio('ciudad') || cambio('idDepartamento')) c.ciudad = form.ciudad || null;
+  if (form.direccion.trim() !== inicial.direccion.trim()) c.direccion = form.direccion.trim();
+  if (form.nombre_inmueble.trim() && form.nombre_inmueble.trim() !== inicial.nombre_inmueble.trim()) {
+    c.nombre_inmueble = form.nombre_inmueble.trim();
+  }
+  if (cambio('estrato')) c.estrato = numeroONull(form.estrato);
+  if (cambio('valor_arriendo')) c.valor_arriendo = numeroONull(form.valor_arriendo);
+  if (cambio('area_construida')) c.area_construida = numeroONull(form.area_construida);
+  if (cambio('mas_admon')) c.mas_admon = form.mas_admon;
+  if (cambio('estado_inmueble')) c.estado_inmueble = form.estado_inmueble;
+
+  if (cambio('nombre_contacto') || cambio('telefono_contacto') || cambio('correo_contacto')) {
+    const nombre = form.nombre_contacto.trim();
+    if (!nombre) c.nombre_contacto = null; // sin nombre se quita el contacto
+    else {
+      c.nombre_contacto = nombre;
+      c.telefono_contacto = form.telefono_contacto.trim() || null;
+      c.correo_contacto = form.correo_contacto.trim() || null;
+    }
+  }
+  return c;
+}
 
 // El back exige un codigo_sae único: para publicaciones web se genera uno.
 const nuevoCodigo = () => `WEB-${Date.now().toString(36).toUpperCase()}${Math.random().toString(36).slice(2, 5).toUpperCase()}`;
 
-export default function PublicarModal() {
-  const { catalogos, cerrarModal, abrirModal, mostrarToast, usuario } = useApp();
-  const [form, setForm] = useState({ ...VACIO, nombre_contacto: usuario?.nombre ?? '', correo_contacto: usuario?.email ?? '' });
+/**
+ * Publicar un inmueble nuevo o, si llega `inmueble`, editar uno propio.
+ * Es el mismo formulario en los dos casos para no duplicar campos ni estilos.
+ */
+export default function PublicarModal({ inmueble = null }) {
+  const { catalogos, cerrarModal, abrirModal, mostrarToast, usuario, avisarCambioInmuebles, actualizarFavorito } = useApp();
+  const editando = Boolean(inmueble);
+  // useState con función: el valor inicial se calcula una sola vez al montar.
+  const [inicial] = useState(() =>
+    editando
+      ? formDesde(inmueble, catalogos.departamentos)
+      : { ...VACIO, nombre_contacto: usuario?.nombre ?? '', correo_contacto: usuario?.email ?? '' },
+  );
+  const [form, setForm] = useState(inicial);
   const [fotos, setFotos] = useState([]);
   const [errores, setErrores] = useState({});
   const [mensaje, setMensaje] = useState('');
@@ -40,6 +110,15 @@ export default function PublicarModal() {
   const cambiar = (campo) => (e) => {
     const valor = e.target.type === 'checkbox' ? e.target.checked : e.target.value;
     setForm((f) => (campo === 'idDepartamento' ? { ...f, idDepartamento: valor, ciudad: '' } : { ...f, [campo]: valor }));
+  };
+
+  const mostrarErrores = (err) => {
+    if (err.details?.length) {
+      setErrores(Object.fromEntries(err.details.map((d) => [d.campo, d.mensaje])));
+      setMensaje('Revisa los campos marcados.');
+    } else {
+      setMensaje(err.message);
+    }
   };
 
   const enviar = async (e) => {
@@ -72,6 +151,27 @@ export default function PublicarModal() {
       ...(form.correo_contacto.trim() && { correo_contacto: form.correo_contacto.trim() }),
     };
 
+    if (editando) {
+      const cambios = construirCambios(form, inicial, departamento);
+      if (!Object.keys(cambios).length) {
+        mostrarToast('No hiciste cambios');
+        cerrarModal();
+        return;
+      }
+      setEnviando(true);
+      try {
+        const actualizado = await actualizarInmueble(inmueble.id, cambios);
+        actualizarFavorito(actualizado);
+        avisarCambioInmuebles();
+        mostrarToast('Cambios guardados');
+        cerrarModal();
+      } catch (err) {
+        mostrarErrores(err);
+        setEnviando(false);
+      }
+      return;
+    }
+
     setEnviando(true);
     try {
       const inmueble = await publicarInmueble(datos);
@@ -83,25 +183,25 @@ export default function PublicarModal() {
         }
       }
       mostrarToast('¡Tu inmueble ya está publicado!');
+      avisarCambioInmuebles();
       abrirModal('detalle', inmueble.id);
     } catch (err) {
-      if (err.details?.length) {
-        setErrores(Object.fromEntries(err.details.map((d) => [d.campo, d.mensaje])));
-        setMensaje('Revisa los campos marcados.');
-      } else {
-        setMensaje(err.message);
-      }
+      mostrarErrores(err);
     } finally {
       setEnviando(false);
     }
   };
 
   return (
-    <Modal titulo="Publicar inmueble" onCerrar={cerrarModal} ancho="ancho">
+    <Modal titulo={editando ? 'Editar inmueble' : 'Publicar inmueble'} onCerrar={cerrarModal} ancho="ancho">
       <form className="form-modal form-publicar" onSubmit={enviar} noValidate>
-        <span className="subtitulo">Beta en Pereira</span>
-        <h2>Publica tu inmueble</h2>
-        <p className="form-intro">Los campos con * son obligatorios. Podrás subir más fotos después desde el detalle.</p>
+        <span className="subtitulo">{editando ? 'Mis inmuebles' : 'Beta en Pereira'}</span>
+        <h2>{editando ? 'Editar inmueble' : 'Publica tu inmueble'}</h2>
+        <p className="form-intro">
+          {editando
+            ? 'Cambia lo que necesites: solo se envían los campos modificados. Las fotos se gestionan desde el detalle.'
+            : 'Los campos con * son obligatorios. Podrás subir más fotos después desde el detalle.'}
+        </p>
 
         <fieldset>
           <legend>El inmueble</legend>
@@ -141,6 +241,17 @@ export default function PublicarModal() {
           <label className="check">
             <input type="checkbox" checked={form.mas_admon} onChange={cambiar('mas_admon')} /> El arriendo no incluye la administración
           </label>
+          {editando && (
+            <Campo id="p-estado" label="Estado de la publicación" error={errores.estado_inmueble}>
+              <select id="p-estado" className="input" value={form.estado_inmueble} onChange={cambiar('estado_inmueble')}>
+                {ESTADOS.map((e) => (
+                  <option key={e} value={e}>
+                    {e}
+                  </option>
+                ))}
+              </select>
+            </Campo>
+          )}
         </fieldset>
 
         <fieldset>
@@ -187,13 +298,15 @@ export default function PublicarModal() {
           </div>
         </fieldset>
 
-        <fieldset>
-          <legend>Fotos (opcional)</legend>
-          <label className="zona-fotos">
-            <input type="file" accept="image/jpeg,image/png,image/webp" multiple onChange={(e) => setFotos([...e.target.files].slice(0, 5))} />
-            <span>{fotos.length ? `${fotos.length} foto${fotos.length > 1 ? 's' : ''} lista${fotos.length > 1 ? 's' : ''}` : 'Elige hasta 5 fotos (JPG, PNG o WebP)'}</span>
-          </label>
-        </fieldset>
+        {!editando && (
+          <fieldset>
+            <legend>Fotos (opcional)</legend>
+            <label className="zona-fotos">
+              <input type="file" accept="image/jpeg,image/png,image/webp" multiple onChange={(e) => setFotos([...e.target.files].slice(0, 5))} />
+              <span>{fotos.length ? `${fotos.length} foto${fotos.length > 1 ? 's' : ''} lista${fotos.length > 1 ? 's' : ''}` : 'Elige hasta 5 fotos (JPG, PNG o WebP)'}</span>
+            </label>
+          </fieldset>
+        )}
 
         {mensaje && <p className="form-error-general">{mensaje}</p>}
 
@@ -202,7 +315,7 @@ export default function PublicarModal() {
             Cancelar
           </button>
           <button type="submit" className="btn btn-naranja" disabled={enviando}>
-            {enviando ? 'Publicando…' : 'Publicar inmueble'}
+            {enviando ? (editando ? 'Guardando…' : 'Publicando…') : editando ? 'Guardar cambios' : 'Publicar inmueble'}
           </button>
         </div>
       </form>

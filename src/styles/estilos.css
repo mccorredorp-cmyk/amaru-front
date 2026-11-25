@@ -873,182 +873,6 @@ a {
     color: var(--texto-suave);
 }
 
-/* ===================== Equipo ===================== */
-.equipo-top {
-    display: grid;
-    grid-template-columns: 1fr 1.1fr;
-    gap: 48px;
-    align-items: center;
-    margin-bottom: 40px;
-}
-
-.foto-equipo {
-    aspect-ratio: 16 / 9;
-    border-radius: var(--radio-xl);
-    overflow: hidden;
-    position: relative;
-    background: var(--turquesa-claro);
-}
-
-.foto-equipo img {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-}
-
-/* Si la foto existe, se oculta el espacio reservado */
-.foto-equipo img + .foto-placeholder,
-.miembro-foto img + .miembro-placeholder {
-    display: none;
-}
-
-.foto-placeholder {
-    position: absolute;
-    inset: 12px;
-    border: 2px dashed rgba(14, 143, 140, 0.4);
-    border-radius: calc(var(--radio-xl) - 8px);
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    gap: 6px;
-    color: var(--turquesa-oscuro);
-    font-weight: 700;
-}
-
-.foto-placeholder small,
-.miembro-placeholder small {
-    font-weight: 500;
-    font-family: ui-monospace, monospace;
-    font-size: 0.78rem;
-    opacity: 0.75;
-}
-
-.grid-equipo {
-    display: grid;
-    grid-template-columns: repeat(3, minmax(0, 1fr));
-    gap: 24px;
-}
-
-.miembro-card {
-    background: var(--superficie);
-    border: 1px solid var(--borde);
-    border-radius: var(--radio-lg);
-    overflow: hidden;
-    transition: transform 0.25s ease, box-shadow 0.25s ease;
-}
-
-.miembro-card:hover {
-    transform: translateY(-6px);
-    box-shadow: var(--sombra-md);
-}
-
-.miembro-foto {
-    position: relative;
-    aspect-ratio: 4 / 5;
-    background: var(--turquesa);
-    overflow: hidden;
-}
-
-.miembro-foto.naranja { background: var(--naranja); }
-.miembro-foto.oscuro { background: var(--tinta); }
-
-.miembro-foto img {
-    position: absolute;
-    inset: 0;
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-    transition: transform 0.5s ease;
-}
-
-.miembro-card:hover .miembro-foto img {
-    transform: scale(1.04);
-}
-
-.miembro-placeholder {
-    position: absolute;
-    inset: 12px;
-    border: 2px dashed rgba(255, 255, 255, 0.45);
-    border-radius: calc(var(--radio-lg) - 6px);
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    gap: 6px;
-    color: #fff;
-}
-
-.iniciales {
-    font-family: var(--font-titulos);
-    font-size: 3.4rem;
-    font-weight: 800;
-    color: #fff;
-    line-height: 1;
-}
-
-.miembro-info {
-    padding: 18px 20px 20px;
-}
-
-.miembro-info h3 {
-    font-size: 1.2rem;
-}
-
-.rol {
-    font-size: 0.85rem;
-    font-weight: 700;
-    color: var(--turquesa);
-    margin-top: 2px;
-}
-
-.bio {
-    font-size: 0.9rem;
-    color: var(--texto-suave);
-    margin-top: 6px;
-}
-
-.rol:empty,
-.bio:empty {
-    display: none;
-}
-
-.redes {
-    display: flex;
-    gap: 8px;
-    margin-top: 12px;
-}
-
-.redes:not(:has(a:not(.vacio))) {
-    display: none;
-}
-
-.redes a {
-    width: 34px;
-    height: 34px;
-    border-radius: 10px;
-    display: grid;
-    place-items: center;
-    background: var(--fondo);
-    border: 1px solid var(--borde);
-    font-size: 0.75rem;
-    font-weight: 800;
-    color: var(--texto);
-    text-decoration: none;
-    transition: all 0.2s ease;
-}
-
-.redes a:hover {
-    background: var(--turquesa);
-    border-color: var(--turquesa);
-    color: #fff;
-}
-
-/* Enlaces aún sin configurar: se ocultan */
-.redes a.vacio {
-    display: none;
-}
-
 /* ===================== Mapa Pereira ===================== */
 .seccion-mapa {
     padding: 90px 0;
@@ -1420,41 +1244,7 @@ a {
     font-size: 0.85rem;
 }
 
-/* ===================== Modal creador ===================== */
-.miembro-card {
-    position: relative;
-    cursor: pointer;
-}
-
-.ver-perfil {
-    position: absolute;
-    top: 14px;
-    right: 14px;
-    z-index: 2;
-    display: inline-flex;
-    align-items: center;
-    gap: 6px;
-    padding: 6px 12px;
-    border-radius: 999px;
-    background: rgba(255, 255, 255, 0.95);
-    color: var(--tinta);
-    font-size: 0.78rem;
-    font-weight: 700;
-    opacity: 0;
-    transform: translateY(-4px);
-    transition: opacity 0.2s ease, transform 0.2s ease;
-}
-
-.miembro-card:hover .ver-perfil,
-.miembro-card:focus-visible .ver-perfil {
-    opacity: 1;
-    transform: none;
-}
-
-@media (hover: none) {
-    .ver-perfil { opacity: 1; transform: none; }
-}
-
+/* ===================== Modal base ===================== */
 .modal {
     position: fixed;
     inset: 0;
@@ -1722,7 +1512,6 @@ a {
     }
 
     .hero-grid,
-    .equipo-top,
     .mapa-wrapper,
     .contacto-wrapper,
     .footer-grid {
@@ -1809,10 +1598,6 @@ a {
 
     .float-1 { left: 8px; bottom: 16px; }
     .float-2 { right: 8px; top: 16px; }
-
-    .grid-equipo {
-        grid-template-columns: 1fr;
-    }
 
     .mapa-box {
         min-height: 420px;

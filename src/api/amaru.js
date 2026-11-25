@@ -6,6 +6,13 @@ export const listarInmuebles = (filtros, senal) => pedir('/inmuebles', { query: 
 export const obtenerInmueble = (id) => pedir(`/inmuebles/${id}`).then((r) => r.inmueble);
 export const publicarInmueble = (datos) => pedir('/inmuebles', { metodo: 'POST', cuerpo: datos }).then((r) => r.inmueble);
 
+// Panel del dueño. El back saca el usuario de la cookie de sesión (nunca de la
+// URL) y vuelve a comprobar que sea el dueño en PATCH y DELETE.
+export const listarMisInmuebles = (filtros, senal) => pedir('/inmuebles/mios', { query: filtros, senal });
+export const actualizarInmueble = (id, cambios) =>
+  pedir(`/inmuebles/${id}`, { metodo: 'PATCH', cuerpo: cambios }).then((r) => r.inmueble);
+export const eliminarInmueble = (id) => pedir(`/inmuebles/${id}`, { metodo: 'DELETE' });
+
 export function subirImagenes(idInmueble, archivos) {
   const form = new FormData();
   archivos.forEach((archivo) => form.append('imagenes', archivo));

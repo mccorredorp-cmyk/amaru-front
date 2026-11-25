@@ -16,7 +16,7 @@ export default function Footer() {
             <li><a href="#propiedades">Inmuebles</a></li>
             <li><a href="#mapa">Mapa</a></li>
             <li><a href="#como-funciona">Cómo funciona</a></li>
-            <li><a href="#equipo">Nosotros</a></li>
+            <li><a href="#nosotros">Nosotros</a></li>
           </ul>
         </div>
 
